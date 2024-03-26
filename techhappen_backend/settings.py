@@ -58,7 +58,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'techhappen_backend.urls'
-
+AUTH_USER_MODEL = 'user.CustomUser'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -139,3 +139,9 @@ if not DEBUG:    # Tell Django to copy static assets into a path called `staticf
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # other authentication classes...
+    ),
+}

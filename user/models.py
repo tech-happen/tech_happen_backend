@@ -12,7 +12,16 @@ class Post(models.Model):
     tags = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     content = models.TextField()
+    likes = models.IntegerField(default=0)
+    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
     read_time = models.IntegerField()  # In minutes
+
+    def save(self, *args, **kwargs):
+        # Calculate read time based on content
+        words_per_minute = 200  # Average reading speed
+        word_count = len(self.content.split())
+        self.read_time = max(1, int(word_count / words_per_minute))  # Ensure read time is at least 1 minute
+        super().save(*args, **kwargs)
 
 
 class Podcast(models.Model):
@@ -24,3 +33,7 @@ class Podcast(models.Model):
 
 class NewsletterSubscriber(models.Model):
     email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
