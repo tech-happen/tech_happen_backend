@@ -163,3 +163,5 @@ cython_debug/
 migrations/*
 db.sqlite3
 __pycache__
+profile_pictures
+user/migrations/*
