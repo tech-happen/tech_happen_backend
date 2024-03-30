@@ -2,15 +2,15 @@
 from rest_framework import serializers
 from .models import Post, Podcast
 from django.contrib.auth import get_user_model
-
+from .main_serializers import  UserSerializer
 User = get_user_model()
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    author = serializers.PrimaryKeyRelatedField(read_only=True, default=UserSerializer(object))
 
     class Meta:
         model = Post
-        fields = ('id', 'topic', 'tags', 'country',  'read_time', 'author')
+        fields = ('id', 'topic', 'tag', 'country', 'content', 'author')
 
     def create(self, validated_data):
         # Calculate read time based on content length (assuming average reading speed)

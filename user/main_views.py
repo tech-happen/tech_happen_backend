@@ -1,11 +1,49 @@
-# views.py
-from rest_framework import generics
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Post, Podcast, NewsletterSubscriber
 from rest_framework.pagination import PageNumberPagination
-from .main_serializers import PostSerializer, PodcastSerializer, NewsletterSubscriberSerializer
+from .main_serializers import PostSerializer, PodcastSerializer, NewsletterSubscriberSerializer, MyTokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .main_serializers import UserSerializer
+from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.permissions import IsAuthenticated
+class UserRegistrationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data,  context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserLoginView(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
+    serializer_class = MyTokenObtainPairSerializer
+
+class UserLogoutView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+
+        try:
+            # Validate the token
+            refresh_token = request.data['refresh_token']
+
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except Exception as e:
+            return Response({e}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
+
+
 
 class HeroPostsAPIView(APIView):
     def get(self, request):
