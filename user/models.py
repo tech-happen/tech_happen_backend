@@ -18,6 +18,7 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
     author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
     read_time = models.IntegerField()  # In minutes
+    created_at = models.DateTimeField(auto_now_add = True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         # Calculate read time based on content

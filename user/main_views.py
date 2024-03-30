@@ -54,7 +54,7 @@ class HeroPostsAPIView(APIView):
 
 class RecentPostsAPIView(APIView):
     def get(self, request):
-        recent_posts = Post.objects.all().order_by('-created_at')[:6]  # Fetch six most recent posts
+        recent_posts = Post.objects.order_by('-created_at')[:6]  # Fetch six most recent posts
         serializer = PostSerializer(recent_posts, many=True)
         return Response(serializer.data)
 
