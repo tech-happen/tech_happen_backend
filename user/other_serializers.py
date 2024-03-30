@@ -21,6 +21,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
     class Meta:
         model = Post
         fields = '__all__'

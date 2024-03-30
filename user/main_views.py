@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Post, Podcast, NewsletterSubscriber
 from rest_framework.pagination import PageNumberPagination
-from .main_serializers import PostSerializer, PodcastSerializer, NewsletterSubscriberSerializer, MyTokenObtainPairSerializer
+from .main_serializers import PodcastSerializer, NewsletterSubscriberSerializer, MyTokenObtainPairSerializer
+from .other_serializers import PostSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -47,7 +48,7 @@ class UserLogoutView(APIView):
 
 class HeroPostsAPIView(APIView):
     def get(self, request):
-        posts = Post.objects.all()[:3]
+        posts = Post.objects.order_by('?')[:3]
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
