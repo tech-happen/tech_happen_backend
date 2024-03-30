@@ -6,7 +6,7 @@ from .main_serializers import  UserSerializer
 User = get_user_model()
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True, default=UserSerializer(object))
+    author = UserSerializer(read_only=True)
 
     class Meta:
         model = Post
